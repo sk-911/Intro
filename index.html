@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mohammed Sohail Khan — Production Support & Reliability Engineer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: #f5f5f5;
+      color: #2c2c2a;
+      line-height: 1.6;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #1a1a1a;
+        color: #e8e8e8;
+      }
+      .container { background: #2a2a2a; border-color: #444; }
+      .header-content .title, .location { color: #b0b0b0; }
+      .tab-btn { color: #888; }
+      .tab-btn:hover { color: #b0b0b0; }
+      .tab-btn.active { color: #4a9eff; }
+      .tab-btn.active::after { background: #4a9eff; }
+      .stat-card { background: #333; border-color: #444; }
+      .stat-label { color: #888; }
+      .stat-value { color: #4a9eff; }
+      .skill-tag { background: #333; border-color: #444; color: #e8e8e8; }
+      .timeline-marker { background: rgba(74, 158, 255, 0.2); border-color: #4a9eff; }
+      .timeline-year { color: #4a9eff; }
+      .milestone-desc { color: #b0b0b0; }
+      .pivot-box { background: rgba(74, 158, 255, 0.1); border-color: #4a9eff; }
+      .pivot-text { color: #7ac4ff; }
+      button { background: #2a2a2a; color: #e8e8e8; border-color: #555; }
+      button:hover { background: #333; }
+    }
+    
+    .page-wrapper { 
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .container { 
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      border: 0.5px solid #e0e0e0;
+      padding: 2rem 1.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .header { display: flex; align-items: flex-start; gap: 1.5rem; margin-bottom: 2rem; }
+    .avatar { 
+      width: 80px; 
+      height: 80px; 
+      border-radius: 50%; 
+      background: linear-gradient(135deg, #378ADD 0%, #185FA5 100%); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-shrink: 0;
+      font-size: 32px;
+      font-weight: 500;
+      color: white;
+    }
+    
+    .header-content { flex: 1; }
+    .name { font-size: 22px; font-weight: 500; color: #2c2c2a; margin-bottom: 4px; }
+    .title { font-size: 14px; color: #666; line-height: 1.4; margin-bottom: 8px; }
+    .location { font-size: 13px; color: #999; }
+    
+    .tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 0.5px solid #e0e0e0; }
+    .tab-btn { 
+      flex: 1; 
+      padding: 0.75rem; 
+      font-size: 14px; 
+      font-weight: 500; 
+      color: #888;
+      background: none; 
+      border: none; 
+      cursor: pointer; 
+      position: relative; 
+      text-align: center; 
+      transition: color 0.2s;
+    }
+    .tab-btn:hover { color: #2c2c2a; }
+    .tab-btn.active { color: #378ADD; }
+    .tab-btn.active::after { 
+      content: ""; 
+      position: absolute; 
+      bottom: -0.5px; 
+      left: 0; 
+      right: 0; 
+      height: 2px; 
+      background: #378ADD; 
+    }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+    .stat-card { 
+      background: #f9f9f9; 
+      border-radius: 8px; 
+      padding: 1rem; 
+      border: 0.5px solid #e0e0e0;
+    }
+    .stat-label { font-size: 12px; color: #999; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { font-size: 20px; font-weight: 500; color: #378ADD; }
+    
+    .milestone { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 0.5px solid #e0e0e0; }
+    .milestone:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .milestone-title { font-size: 15px; font-weight: 500; color: #2c2c2a; margin-bottom: 4px; }
+    .milestone-date { font-size: 12px; color: #999; margin-bottom: 6px; }
+    .milestone-desc { font-size: 14px; color: #666; line-height: 1.5; }
+    
+    .timeline { margin-bottom: 1.5rem; }
+    .timeline-item { display: flex; gap: 12px; margin-bottom: 1.25rem; }
+    .timeline-marker { 
+      width: 24px; 
+      height: 24px; 
+      border-radius: 50%; 
+      background: rgba(55, 138, 221, 0.1); 
+      border: 2px solid #378ADD; 
+      flex-shrink: 0; 
+      margin-top: 2px; 
+    }
+    .timeline-content { flex: 1; }
+    .timeline-year { font-size: 13px; font-weight: 500; color: #378ADD; margin-bottom: 2px; }
+    .timeline-role { font-size: 14px; font-weight: 500; color: #2c2c2a; margin-bottom: 2px; }
+    .timeline-company { font-size: 13px; color: #666; }
+    
+    .skill-group { margin-bottom: 1.5rem; }
+    .skill-group-label { font-size: 12px; font-weight: 500; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .skill-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-tag { 
+      display: inline-block; 
+      background: #f9f9f9; 
+      border: 0.5px solid #e0e0e0; 
+      border-radius: 8px; 
+      padding: 6px 12px; 
+      font-size: 13px; 
+      color: #2c2c2a;
+    }
+    
+    .pivot-box { 
+      background: rgba(55, 138, 221, 0.08); 
+      border-radius: 12px; 
+      border: 0.5px solid rgba(55, 138, 221, 0.3); 
+      padding: 1rem; 
+      margin-bottom: 1.5rem;
+    }
+    .pivot-label { font-size: 12px; font-weight: 500; color: #378ADD; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .pivot-text { font-size: 14px; color: #378ADD; line-height: 1.6; }
+    
+    .cta-group { display: flex; gap: 8px; margin-top: 1.5rem; flex-wrap: wrap; }
+    button { 
+      padding: 0.5rem 1rem; 
+      border-radius: 8px; 
+      border: 0.5px solid #d0d0d0; 
+      background: white; 
+      color: #2c2c2a; 
+      font-size: 13px; 
+      font-weight: 500; 
+      cursor: pointer; 
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button:hover { background: #f5f5f5; }
+    button.primary { background: #378ADD; color: white; border-color: #378ADD; }
+    button.primary:hover { background: #2870c5; }
+    
+    .footer { 
+      text-align: center; 
+      margin-top: 2rem; 
+      padding-top: 1rem; 
+      border-top: 0.5px solid #e0e0e0; 
+      font-size: 12px; 
+      color: #999;
+    }
+    
+    a { color: #378ADD; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="container">
+      <div class="header">
+        <div class="avatar">MSK</div>
+        <div class="header-content">
+          <div class="name">Mohammed Sohail Khan</div>
+          <div class="title">Lead Production Support & Reliability Engineer</div>
+          <div class="location">🌍 Mumbai, India | Remote-first, globally distributed teams</div>
+        </div>
+      </div>
+      
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('snapshot', this)">Snapshot</button>
+        <button class="tab-btn" onclick="switchTab('career', this)">Career</button>
+        <button class="tab-btn" onclick="switchTab('skills', this)">Skills</button>
+      </div>
+      
+      <div id="snapshot" class="tab-content active">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Years of experience</div>
+            <div class="stat-value">12+</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Uptime SLA maintained</div>
+            <div class="stat-value">99.9%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Incident reduction</div>
+            <div class="stat-value">30%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Repeat incidents cut by</div>
+            <div class="stat-value">25%</div>
+          </div>
+        </div>
+        
+        <div class="pivot-box">
+          <div class="pivot-label">Current focus</div>
+          <div class="pivot-text">Applying 12+ years of production reliability, incident management, and automation expertise to AI-first and AI-enabled platform environments, where uptime, monitoring, and rapid incident resolution are critical.</div>
+        </div>
+        
+        <div style="font-size: 14px; color: #666; line-height: 1.6; margin-top: 1rem;">
+          <strong>Mission:</strong> Bring enterprise-grade reliability discipline to the next generation of AI systems. Lead on-call teams, drive SLA ownership, and build monitoring and automation that prevents incidents before they impact users.
+        </div>
+      </div>
+      
+      <div id="career" class="tab-content">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">Jun 2019 – Present</div>
+              <div class="timeline-role">Lead Application Support Engineer</div>
+              <div class="timeline-company">Virtusa (Citi Bank EMEA, Trade & Securities Services)</div>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">Nov 2015 – Jul 2017</div>
+              <div class="timeline-role">Associate Consultant – DBA & Application Support</div>
+              <div class="timeline-company">Capgemini (TOTAL Energy)</div>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">Jun 2014 – Nov 2015</div>
+              <div class="timeline-role">Application Support Engineer</div>
+              <div class="timeline-company">I4 Global (Vendor for Capgemini)</div>
+            </div>
+          </div>
+          
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-year">Sep 2012 – Jun 2014</div>
+              <div class="timeline-role">IT Support Executive</div>
+              <div class="timeline-company">Euclid Infotech</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="milestone" style="border-top: 0.5px solid #e0e0e0; padding-top: 1.25rem;">
+          <div class="milestone-title" style="color: #378ADD; margin-bottom: 8px;">Key achievement</div>
+          <div class="milestone-desc">Cut incident frequency by 30% through predictive monitoring automation using PowerShell, T-SQL, ITRS Geneos, and AppDynamics. Led RCA and post-incident reviews for P1/P2 incidents, reducing repeat incidents by 25%.</div>
+        </div>
+      </div>
+      
+      <div id="skills" class="tab-content">
+        <div class="skill-group">
+          <div class="skill-group-label">Reliability & automation</div>
+          <div class="skill-list">
+            <div class="skill-tag">Incident Management</div>
+            <div class="skill-tag">RCA & RCA Review</div>
+            <div class="skill-tag">Monitoring & Alerting</div>
+            <div class="skill-tag">MTTR Reduction</div>
+          </div>
+        </div>
+        
+        <div class="skill-group">
+          <div class="skill-group-label">Service management</div>
+          <div class="skill-list">
+            <div class="skill-tag">ITIL v4</div>
+            <div class="skill-tag">Problem Management</div>
+            <div class="skill-tag">Change Management</div>
+            <div class="skill-tag">SLA/KPI Mgmt</div>
+          </div>
+        </div>
+        
+        <div class="skill-group">
+          <div class="skill-group-label">Microsoft stack</div>
+          <div class="skill-list">
+            <div class="skill-tag">.NET (C#)</div>
+            <div class="skill-tag">SQL Server</div>
+            <div class="skill-tag">Windows Server</div>
+            <div class="skill-tag">IIS</div>
+            <div class="skill-tag">Azure Monitor</div>
+          </div>
+        </div>
+        
+        <div class="skill-group">
+          <div class="skill-group-label">Scripting & tools</div>
+          <div class="skill-list">
+            <div class="skill-tag">PowerShell</div>
+            <div class="skill-tag">T-SQL</div>
+            <div class="skill-tag">Python</div>
+            <div class="skill-tag">ITRS Geneos</div>
+            <div class="skill-tag">AppDynamics</div>
+          </div>
+        </div>
+        
+        <div class="skill-group">
+          <div class="skill-group-label">Domain</div>
+          <div class="skill-list">
+            <div class="skill-tag">BFSI</div>
+            <div class="skill-tag">Capital Markets</div>
+            <div class="skill-tag">Front-Office Trading</div>
+            <div class="skill-tag">FIX Protocol</div>
+            <div class="skill-tag">Settlement Systems</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cta-group">
+        <button class="primary" onclick="window.open('mailto:sohail.khan911@icloud.com?subject=AI-first%20Production%20Support%20Role')">Get in touch</button>
+        <button onclick="window.open('https://linkedin.com/in/your-profile')">LinkedIn</button>
+      </div>
+      
+      <div class="footer">
+        <p>📧 sohail.khan911@icloud.com | 📱 +91 7208 744375</p>
+        <p style="margin-top: 8px;">Last updated: September 2026</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function switchTab(tabName, button) {
+      const tabs = document.querySelectorAll('.tab-content');
+      const btns = document.querySelectorAll('.tab-btn');
+      tabs.forEach(t => t.classList.remove('active'));
+      btns.forEach(b => b.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      button.classList.add('active');
+    }
+  </script>
+</body>
+</html>
